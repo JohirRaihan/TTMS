@@ -54,6 +54,7 @@ builder.Services.AddMediatR(cfg =>
 builder.Services.AddScoped<IAuthServiceFactory, AuthServiceFactory>();
 builder.Services.AddScoped<IUserFactory, UserFactory>();
 
+
 // Swagger services
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

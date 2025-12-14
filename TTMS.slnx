@@ -4,5 +4,5 @@
   <Project Path="HIMS.Data/TTMS.Data.csproj" />
   <Project Path="HIMS.Domains/TTMS.Domains.csproj" />
   <Project Path="HIMS.Models/TTMS.Models.csproj" />
-  <Project Path="HIMS.Test/TTMS.Testes.csproj" />
+  <Project Path="HIMS.Test/TTMS.Tests.csproj" />
 </Solution>

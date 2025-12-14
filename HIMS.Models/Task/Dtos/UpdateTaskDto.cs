@@ -7,7 +7,7 @@ namespace TTMS.Models.Task.Dtos
         public string Title { get; set; } = null!;
 
         public string Description { get; set; } = null!;
-        public TaskStatus Status { get; set; }
+        public Enums.TaskStatus Status { get; set; }
         public DateTime DueDate { get; set; }
 
         public Guid AssignedToUserId { get; set; }

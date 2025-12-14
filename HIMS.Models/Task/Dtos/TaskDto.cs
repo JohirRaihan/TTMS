@@ -1,14 +1,14 @@
 ﻿using TTMS.Models.Team.Dtos;
 using TTMS.Models.User.Dtos;
 
-namespace HIMS.Models.Department.Dtos
+namespace TTMS.Models.Task.Dtos
 {
     public class TaskDto
     {
         public Guid Id { get; set; }
         public string Title { get; set; } = null!;
         public string Description { get; set; } = null!;
-        public TaskStatus Status { get; set; }
+        public TTMS.Models.Task.Enums.TaskStatus Status { get; set; }
         public DateTime DueDate { get; set; }
 
 

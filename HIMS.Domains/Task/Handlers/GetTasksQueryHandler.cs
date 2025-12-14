@@ -1,8 +1,8 @@
-﻿using HIMS.Models.Department.Dtos;
-using MediatR;
+﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 using TTMS.Data.Context;
 using TTMS.Domains.Task.Quries;
+using TTMS.Models.Task.Dtos;
 
 namespace TTMS.Domains.Task.Handlers
 {

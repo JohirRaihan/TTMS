@@ -4,6 +4,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using TTMS.Data.Context;
 using TTMS.Domains.Factories;
+using TTMS.Domains.Task.Handlers;
 using TTMS.Domains.User.Handlers;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -41,13 +42,17 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-
-builder.Services.AddScoped<IAuthServiceFactory, AuthServiceFactory>();
-
 builder.Services.AddMediatR(cfg =>
     cfg.RegisterServicesFromAssembly(typeof(GetAllUserQueryHandler).Assembly));
-builder.Services.AddScoped<IUserFactory, UserFactory>();
+builder.Services.AddMediatR(cfg =>
+    cfg.RegisterServicesFromAssembly(typeof(GetTasksQueryHandler).Assembly));
+builder.Services.AddMediatR(cfg =>
+    cfg.RegisterServicesFromAssembly(typeof(CreateTaskCommandHandler).Assembly));
+builder.Services.AddMediatR(cfg =>
+    cfg.RegisterServicesFromAssembly(typeof(UpdateTaskCommandHandler).Assembly));
 
+builder.Services.AddScoped<IAuthServiceFactory, AuthServiceFactory>();
+builder.Services.AddScoped<IUserFactory, UserFactory>();
 
 // Swagger services
 builder.Services.AddEndpointsApiExplorer();

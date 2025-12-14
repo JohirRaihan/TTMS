@@ -1,4 +1,4 @@
-﻿namespace HIMS.UnitTest
+﻿namespace TTMS.Testes
 {
     [TestClass]
     public sealed class Test1

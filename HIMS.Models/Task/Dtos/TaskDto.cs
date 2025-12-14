@@ -1,6 +1,9 @@
-﻿namespace TTMS.Data.Models
+﻿using TTMS.Models.Team.Dtos;
+using TTMS.Models.User.Dtos;
+
+namespace TTMS.Models.Task.Dtos
 {
-    public class FactTask
+    public class TaskDto
     {
         public Guid Id { get; set; }
         public string Title { get; set; } = null!;
@@ -10,14 +13,14 @@
 
 
         public Guid AssignedToUserId { get; set; }
-        public DimUser AssignedToUser { get; set; } = null!;
+        public UserDto AssignedToUser { get; set; } = null!;
 
 
         public Guid CreatedByUserId { get; set; }
-        public DimUser CreatedByUser { get; set; } = null!;
+        public UserDto CreatedByUser { get; set; } = null!;
 
 
         public Guid TeamId { get; set; }
-        public DimTeam Team { get; set; } = null!;
+        public TeamDto Team { get; set; } = null!;
     }
 }

@@ -1,0 +1,80 @@
+# Azure DevOps CI/CD YAML for TTMS (.NET 10, Linux)
+
+trigger:
+  branches:
+    include:
+      - main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  buildConfiguration: 'Release'
+
+stages:
+  - stage: Build
+    displayName: 'Build Stage'
+    jobs:
+      - job: Build
+        displayName: 'Restore, Build and Test'
+        steps:
+          - task: UseDotNet@2
+            displayName: 'Use .NET 10 SDK'
+            inputs:
+              packageType: 'sdk'
+              version: '10.x.x'
+              installationPath: $(Agent.ToolsDirectory)/dotnet
+
+          - task: DotNetCoreCLI@2
+            displayName: 'Restore NuGet packages'
+            inputs:
+              command: 'restore'
+              projects: '**/*.csproj'
+
+          - task: DotNetCoreCLI@2
+            displayName: 'Build Solution'
+            inputs:
+              command: 'build'
+              projects: '**/*.csproj'
+              arguments: '--configuration $(buildConfiguration)'
+
+          - task: DotNetCoreCLI@2
+            displayName: 'Run Unit Tests'
+            inputs:
+              command: 'test'
+              projects: '**/*Tests.csproj'
+              arguments: '--configuration $(buildConfiguration) --logger trx'
+
+  - stage: Deploy
+    displayName: 'Deploy Stage'
+    dependsOn: Build
+    jobs:
+      - deployment: DeployWebApp
+        displayName: 'Deploy TTMS to Linux'
+        environment: 'production'
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - task: UseDotNet@2
+                  displayName: 'Use .NET 10 SDK'
+                  inputs:
+                    packageType: 'sdk'
+                    version: '10.x.x'
+                    installationPath: $(Agent.ToolsDirectory)/dotnet
+
+                - task: DotNetCoreCLI@2
+                  displayName: 'Publish Web API'
+                  inputs:
+                    command: 'publish'
+                    publishWebProjects: true
+                    arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)/publish'
+
+                - task: AzureWebApp@1
+                  displayName: 'Deploy to Azure App Service (Linux)'
+                  inputs:
+                    azureSubscription: '<Your Azure Subscription>'
+                    appType: 'webAppLinux'
+                    appName: '<Your App Service Name>'
+                    package: '$(Build.ArtifactStagingDirectory)/publish'
+                    runtimeStack: 'DOTNETCORE|10.0'

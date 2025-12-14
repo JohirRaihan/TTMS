@@ -13,7 +13,7 @@ namespace TTMS.API.Controllers
         private readonly IMediator _mediator = mediator;
         private readonly IUserFactory _employeeFactory = employeeFactory;
 
-        [HttpGet("")]
+        [HttpGet()]
         public async Task<ActionResult<IEnumerable<UserDto>>>GetAllUser() { 
             var getUserQuery = new GetAllUserQuery();
             var userDtos = await _mediator.Send(getUserQuery);

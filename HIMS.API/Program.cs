@@ -1,6 +1,10 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 using TTMS.Data.Context;
 using TTMS.Domains.Factories;
+using TTMS.Domains.User.Handlers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,7 +24,28 @@ builder.Services.AddDbContext<TTMSContext>(options =>
             sqlServerOptions.CommandTimeout(30);
         });
 });
-builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidateAudience = true,
+            ValidAudience = builder.Configuration["Jwt:Audience"],
+            ValidateLifetime = true,
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Token"]!)),
+            ValidateIssuerSigningKey = true
+        };
+    });
+
+
+builder.Services.AddScoped<IAuthServiceFactory, AuthServiceFactory>();
+
+builder.Services.AddMediatR(cfg =>
+    cfg.RegisterServicesFromAssembly(typeof(GetAllUserQueryHandler).Assembly));
 builder.Services.AddScoped<IUserFactory, UserFactory>();
 
 

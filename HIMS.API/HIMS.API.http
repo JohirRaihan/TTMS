@@ -1,0 +1,6 @@
+@HIMS.API_HostAddress = http://localhost:5217
+
+GET {{HIMS.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
